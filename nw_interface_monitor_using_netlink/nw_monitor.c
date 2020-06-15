@@ -11,25 +11,25 @@
 #include <linux/rtnetlink.h>
 
 int open_netlink() {
-	int sock = socket(AF_NETLINK, SOCK_RAW, NETLINK_ROUTE);
+    int sock = socket(AF_NETLINK, SOCK_RAW, NETLINK_ROUTE);
     struct sockaddr_nl addr;
 
     memset((void *)&addr, 0, sizeof(addr));
 
     if (sock < 0) {
         printf ("Socket Open Error!");
-		exit(1);
-	}
-		
+        exit(1);
+    }
+
     addr.nl_family = AF_NETLINK;
     addr.nl_pid = getpid();
     addr.nl_groups = RTMGRP_LINK | RTMGRP_IPV4_IFADDR | RTMGRP_IPV6_IFADDR;
-    
-	if (bind(sock,(struct sockaddr *)&addr, sizeof(addr)) < 0) {
-	    printf ("Socket bind failed!");
+
+    if (bind(sock,(struct sockaddr *)&addr, sizeof(addr)) < 0) {
+        printf ("Socket bind failed!");
         exit(1);
-	}
-	
+    }
+
     return sock;
 }
 
@@ -42,14 +42,13 @@ int read_event(int sockint, int (*msg_handler)(struct sockaddr_nl *, struct nlms
     struct sockaddr_nl snl;
     struct msghdr buf_msg = { (void*)&snl, sizeof snl, &iov, 1, NULL, 0, 0 };
     struct nlmsghdr *msg;
-	
+
     status = recvmsg(sockint, &buf_msg, 0);
-	
     if(status < 0) {
         /* Socket non-blocking so bail out once we have read everything */
         if (errno == EWOULDBLOCK || errno == EAGAIN) {
             return ret;
-	    }
+        }
 
         /* Anything else is an error */
         printf("read_netlink: Error recvmsg: %d\n", status);
@@ -66,7 +65,7 @@ int read_event(int sockint, int (*msg_handler)(struct sockaddr_nl *, struct nlms
         /* Finish reading */
         if (msg->nlmsg_type == NLMSG_DONE) {
             return ret;
-		}
+        }
 
         /* Message is some kind of error */
         if (msg->nlmsg_type == NLMSG_ERROR) {
@@ -93,16 +92,15 @@ int read_event(int sockint, int (*msg_handler)(struct sockaddr_nl *, struct nlms
 static int netlink_link_state(struct sockaddr_nl *nl, struct nlmsghdr *msg)
 {
     struct ifinfomsg *ifi;
-	char ifname[1024];
+    char ifname[1024];
 
     ifi = NLMSG_DATA(msg);
     if_indextoname(ifi->ifi_index, ifname);
-	
+
     printf("netlink_link_state: Link %s %s\n", ifname,((ifi->ifi_flags & IFF_UP)  && (ifi->ifi_flags & IFF_RUNNING))?"Up":"Down");
     return 0;
-
 }
-	
+
 static int msg_handler(struct sockaddr_nl *nl, struct nlmsghdr *msg) {
     switch (msg->nlmsg_type) {
         case RTM_NEWADDR:
@@ -134,15 +132,14 @@ static int msg_handler(struct sockaddr_nl *nl, struct nlmsghdr *msg) {
 
 
 int main(int argc, char *argv[]) {
-
     int nls = open_netlink();
     printf("Started watching:\n");
     if (nls<0) {
         printf("Open Error!");
     }
-    
-	while (1) {
-	    read_event(nls, msg_handler);
-	}
+
+    while (1) {
+        read_event(nls, msg_handler);
+    }
     return 0;
 }
