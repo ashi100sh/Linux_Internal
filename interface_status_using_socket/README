@@ -1,0 +1,36 @@
+Program to read status(UP/DOWN) of interface
+
+root@ashish:# gcc -Wall interface_status.c -o interface_status
+root@ashish:# ./interface_status lo
+Status of Interface:lo ==> 1 (UP)
+root@ashish:/home/ashish/git_repo/Linux_Internal/interface_status_using_socket# ifconfig
+enp0s3: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 192.168.2.11  netmask 255.255.255.0  broadcast 192.168.2.255
+        inet6 fe80::a00:27ff:fd4e:385f  prefixlen 64  scopeid 0x20<link>
+        ether 08:00:27:4e:38:5f  txqueuelen 1000  (Ethernet)
+        RX packets 11932  bytes 957066 (957.0 KB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 8917  bytes 857629 (857.6 KB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
+        inet 127.0.0.1  netmask 255.0.0.0
+        inet6 ::1  prefixlen 128  scopeid 0x10<host>
+        loop  txqueuelen 1000  (Local Loopback)
+        RX packets 2179  bytes 155577 (155.5 KB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 2179  bytes 155577 (155.5 KB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+root@ashish:# ./interface_status enp0s3
+Status of Interface:enp0s3 ==> 1 (UP)
+root@ashish:# ifconfig lo down
+root@ashish:# ./interface_status lo
+Status of Interface:lo ==> 0 (DOWN)
+root@ashish:#
+
+Alternative:
+======================
+https://www.kernel.org/doc/Documentation/ABI/testing/sysfs-class-net
+ /sys/class/net/lo/operstate 
+ /sys/class/net/lo/carrier
