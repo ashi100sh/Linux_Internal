@@ -1,0 +1,34 @@
+Code to monitor network interface status 
+It use netlink method.
+
+Complile code : gcc -Wall nw_monitor.c -o nw_monitor
+
+root@ashish:# ./nw_monitor
+Started watching:
+msg_handler: RTM_NEWLINK
+netlink_link_state: Link lo Down
+msg_handler: RTM_DELADDR
+msg_handler: RTM_NEWLINK
+netlink_link_state: Link lo Up
+msg_handler: RTM_NEWADDR
+msg_handler: RTM_NEWLINK
+netlink_link_state: Link enp0s3 Down
+msg_handler: RTM_DELADDR
+msg_handler: RTM_DELADDR
+msg_handler: RTM_NEWLINK
+netlink_link_state: Link enp0s3 Down
+msg_handler: RTM_NEWLINK
+netlink_link_state: Link enp0s3 Up
+msg_handler: RTM_NEWADDR
+msg_handler: RTM_NEWADDR
+msg_handler: RTM_NEWLINK
+netlink_link_state: Link enp0s3 Down
+msg_handler: RTM_DELADDR
+msg_handler: RTM_DELADDR
+msg_handler: RTM_NEWLINK
+netlink_link_state: Link enp0s3 Down
+msg_handler: RTM_NEWLINK
+netlink_link_state: Link enp0s3 Up
+msg_handler: RTM_NEWADDR
+msg_handler: RTM_NEWADDR
+
